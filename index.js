@@ -9,3 +9,5 @@ app.use(locationController)
 app.listen(port, () => {
 	console.log(`API listening on port ${port}, visit http://localhost:${port}/`)
 })
+
+app.get('', (req,res) => {    res.send("Hello World")})
