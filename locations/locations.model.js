@@ -1,9 +1,5 @@
 const mongoose = require('mongoose')
 
-async function main(){
-	const result = await mongoose.connect(process.env.MONGO_URI).then(()=>{console.log("Connected")});
-
-}
 
 const filmSchema = new mongoose.Schema({
 	filmType: String,
