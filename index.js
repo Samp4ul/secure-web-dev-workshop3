@@ -10,7 +10,9 @@ app.use(locationController)
 
 
 async function main(){
-	const result = await mongoose.connect(process.env.MONGO_URI).then(()=>{console.log("Connected")});
+	const client = await mongoose.connect(process.env.MONGO_URI).then(()=>{console.log("Connected")});
+
+
 	app.listen(port, () => {
 		console.log(`API listening on port ${port}, visit http://localhost:${port}/`)
 	})

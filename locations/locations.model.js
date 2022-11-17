@@ -18,6 +18,6 @@ const filmSchema = new mongoose.Schema({
 	year: Number,
 })
 
-const Location = mongoose.model('Location', filmSchema)
+const Location = mongoose.model('filmslocations', filmSchema)
 
 module.exports = Location

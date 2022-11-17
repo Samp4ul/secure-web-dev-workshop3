@@ -8,17 +8,18 @@ const express = require("express");
 
 router.use(bodyParser.json());
 
-router.get('/locations', (req, res) => {
-	return res.status(200).send({locations: []})
+router.get('/locations', async (req, res) => {
+	const locations = await locationsService.findAll();
+	return res.status(200).send(locations)
 })
 
 
+router.get('/locations/:id', async (req, res) => {
+	const location = await locationsService.find(req.params.id)
+	res.status(200).json(location)
+})
 
-router.get('/location/:id', (req,res) => {    const id = parseInt(req.params.id)
-	const location = locationsService.find(locations => locations.id === id)
-	res.status(200).json(locationsService)})
-
-router.post('/locations', (req,res) => {    locationsService.push(req.body)
+router.post('/locations', (req,res) => {    console.log(req.body)
 	res.status(200).json(locationsService)})
 
 module.exports = router
