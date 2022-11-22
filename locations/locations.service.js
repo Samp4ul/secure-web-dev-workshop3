@@ -12,5 +12,20 @@ function find(id) {
 	)
 }
 
-module.exports = {findAll,find}
+function create(updateInfo){
+	return Location.insertMany(updateInfo)
+
+}
+
+function update(id,updateInfo){
+	const location = find(id);
+	return location.update(updateInfo)
+
+}
+
+function deleteO(id){
+	return Location.deleteOne(find({_id:id}))
+}
+
+module.exports = {findAll,find,update,deleteO,create}
 

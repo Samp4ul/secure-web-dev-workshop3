@@ -19,7 +19,19 @@ router.get('/locations/:id', async (req, res) => {
 	res.status(200).json(location)
 })
 
-router.post('/locations', (req,res) => {    console.log(req.body)
-	res.status(200).json(locationsService)})
+router.post('/locations/', async (req, res) => {
+	const location = await locationsService.create({...req.body})
+	res.status(200).json(location)
+})
+
+router.put('/locations/:id', async (req, res) => {
+	const location = await locationsService.update(req.params.id, {...req.body})
+	res.status(200).json(location)
+})
+
+router.delete('/locations/:id', async (req, res) => {
+	const location = await locationsService.deleteO(req.params.id)
+	res.status(200).json(location)
+})
 
 module.exports = router
