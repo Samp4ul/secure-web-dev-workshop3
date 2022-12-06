@@ -3,6 +3,9 @@ const bodyParser = require("body-parser");
 const loginService = require('./users.service')
 const express = require("express");
 
+const passport = require("passport");
+
+
 router.use(bodyParser.json());
 
 router.post('/users/register', async (req, res) => {
@@ -54,6 +57,18 @@ router.delete('/users/me', async (req, res) => {
     const login = await loginService.deleteO(req.params.id)
     res.status(200).send(login)
 })
+
+router.post('/users/login',
+    passport.authenticate('local',{session:false}),
+    async (req, res) => {
+   try{
+       res.status(200).send(req.user)
+   }
+   catch (e){
+       res.status(400).send("Bad request")
+   }
+
+});
 
 
 module.exports = router

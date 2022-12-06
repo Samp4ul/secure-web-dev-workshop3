@@ -3,6 +3,10 @@ const locationController = require('./locations/locations.controller')
 const usersController = require('./users/users.controller')
 const app = express()
 const port = 3000
+const localStrategy = require("./auth/local.strategy")
+
+
+
 
 const mongoose = require('mongoose')
 require('dotenv').config()

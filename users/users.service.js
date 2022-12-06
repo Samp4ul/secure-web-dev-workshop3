@@ -3,10 +3,19 @@ const bcrypt = require("bcrypt")
 
 
 async function create(updateInfo) {
-    const salt = await bcrypt.genSalt()
+    const salt = 10
     const login = new Login({...updateInfo, password: await bcrypt.hash(updateInfo.password, salt)})
     await login.save()
     return login
+}
+
+async function checkPassword(username,password){
+    const user = await Login.findOne({username})
+    const match = await bcrypt.compare(password,user.password)
+    if(!match){
+        return false
+    }
+    return user
 }
 
 function findAll () {
@@ -28,4 +37,13 @@ function deleteO(id){
     return Login.deleteOne(find({_id:id}))
 }
 
-module.exports = {create,find,findAll,update,deleteO}
+function login(body){
+    try{
+        Login.findOne({"username":body.username})
+
+    }
+    catch (e){
+    }
+}
+
+module.exports = {create,find,findAll,update,deleteO,login,checkPassword}
