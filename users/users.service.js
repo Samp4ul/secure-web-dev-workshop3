@@ -27,6 +27,12 @@ function find(id) {
         {_id:id}
     )
 }
+
+function findU(username) {
+    return Login.findOne(
+        {_username:username}
+    )
+}
 function update(id,updateInfo){
     const login = find(id);
     return login.update(updateInfo)
@@ -46,4 +52,4 @@ function login(body){
     }
 }
 
-module.exports = {create,find,findAll,update,deleteO,login,checkPassword}
+module.exports = {create,find,findAll,update,deleteO,login,checkPassword,findU}

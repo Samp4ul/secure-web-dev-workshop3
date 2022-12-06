@@ -5,6 +5,8 @@ const express = require("express");
 
 const passport = require("passport");
 
+const jwt = require("jsonwebtoken")
+
 
 router.use(bodyParser.json());
 
@@ -61,12 +63,15 @@ router.delete('/users/me', async (req, res) => {
 router.post('/users/login',
     passport.authenticate('local',{session:false}),
     async (req, res) => {
-   try{
-       res.status(200).send(req.user)
-   }
-   catch (e){
-       res.status(400).send("Bad request")
-   }
+        const user = await loginService.findU(req.params.username)
+        const token = jwt.sign(
+            { user_id: user._id},
+            process.env.TOKEN_KEY,
+            {
+                expiresIn: "2h",
+            }
+        );
+        res.status(200).send({"token" : token})
 
 });
 
