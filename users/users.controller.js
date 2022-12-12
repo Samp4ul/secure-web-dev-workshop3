@@ -10,6 +10,24 @@ const jwt = require("jsonwebtoken")
 
 router.use(bodyParser.json());
 
+
+const verifyUserToken = (req, res, next) => {
+    if (!req.headers.authorization) {
+        return res.status(401).send("Unauthorized request");
+    }
+    const token = req.headers["authorization"].split(" ")[1];
+    if (!token) {
+        return res.status(401).send("Access denied. No token provided.");
+    }
+    try {
+        const decoded = jwt.verify(token, process.env.TOKEN_KEY);
+        req.user = decoded.user_id;
+        next();
+    } catch (err) {
+        res.status(400).send("Invalid token.");
+    }
+};
+
 router.post('/users/register', async (req, res) => {
     try{
         const login = await loginService.create(req.body)
@@ -31,7 +49,7 @@ router.post('/users/register', async (req, res) => {
 
 })
 
-router.get('/users', async (req, res) => {
+router.get('/users',verifyUserToken, async (req, res) => {
     try{
         const login = await loginService.findAll();
         return res.status(200).send(login)
@@ -44,19 +62,19 @@ router.get('/users', async (req, res) => {
 })
 
 
-router.get('/users/me', async (req, res) => {
-    const login = await loginService.find(req.params.id)
+router.get('/users/me',verifyUserToken, async (req, res) => {
+    const login = await loginService.find(req.user)
     res.status(200).send(login)
 })
 
 
-router.put('/users/me', async (req, res) => {
-    const login = await loginService.update(req.params.id, {...req.body})
+router.put('/users/me',verifyUserToken, async (req, res) => {
+    const login = await loginService.update(req.user, {...req.body})
     res.status(200).send(login)
 })
 
-router.delete('/users/me', async (req, res) => {
-    const login = await loginService.deleteO(req.params.id)
+router.delete('/users/me',verifyUserToken, async (req, res) => {
+    const login = await loginService.deleteO(req.user)
     res.status(200).send(login)
 })
 
@@ -68,7 +86,7 @@ router.post('/users/login',
             { user_id: user._id},
             process.env.TOKEN_KEY,
             {
-                expiresIn: "2h",
+                expiresIn: 60*60,
             }
         );
         res.status(200).send({"token" : token})
