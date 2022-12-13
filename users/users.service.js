@@ -42,7 +42,7 @@ function findU(username) {
 }
 function update(id,updateInfo){
     const login = find(id);
-    return login.update(updateInfo)
+    return login.updateOne({_id:id},updateInfo)
 
 }
 

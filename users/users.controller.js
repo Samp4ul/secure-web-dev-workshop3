@@ -76,7 +76,7 @@ router.get('/users',verifyUserToken,roleMiddleware(['admin']), async (req, res) 
 
 
 router.get('/users/me',verifyUserToken, async (req, res) => {
-    const login = await loginService.find(req.user)
+    const login = await loginService.find(req.user_id)
     res.status(200).send(login)
 })
 

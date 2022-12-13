@@ -18,8 +18,7 @@ function create(updateInfo){
 }
 
 function update(id,updateInfo){
-	const location = find(id);
-	return location.update(updateInfo)
+	return Location.updateOne({_id:id},updateInfo)
 
 }
 
