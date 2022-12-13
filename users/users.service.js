@@ -40,9 +40,12 @@ function findU(username) {
         {username:username}
     )
 }
-function update(id,updateInfo){
-    const login = find(id);
-    return login.updateOne({_id:id},updateInfo)
+async function update(id, updateInfo) {
+    const salt = 10
+    return Login.updateOne({_id: id},
+        {
+            $set: {"username": updateInfo.username, "password": await bcrypt.hash(updateInfo.password, salt)}
+        })
 
 }
 
