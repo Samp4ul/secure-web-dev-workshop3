@@ -1,10 +1,11 @@
 const Login = require('./users.model')
 const bcrypt = require("bcrypt")
+const {ObjectID} = require("mongodb");
 
 
 async function create(updateInfo) {
     const salt = 10
-    const login = new Login({...updateInfo, password: await bcrypt.hash(updateInfo.password, salt)})
+    const login = new Login({...updateInfo, password: await bcrypt.hash(updateInfo.password, salt), role :"membre"})
     await login.save()
     return login
 }
@@ -28,9 +29,15 @@ function find(id) {
     )
 }
 
+async function findR(id) {
+    var ID = ObjectID(id)
+    const user = await Login.findOne({_id : ID})
+    return user.role
+}
+
 function findU(username) {
     return Login.findOne(
-        {_username:username}
+        {username:username}
     )
 }
 function update(id,updateInfo){
@@ -40,16 +47,10 @@ function update(id,updateInfo){
 }
 
 function deleteO(id){
-    return Login.deleteOne(find({_id:id}))
+    console.log(id)
+    return Login.deleteOne({"_id":id})
 }
 
-function login(body){
-    try{
-        Login.findOne({"username":body.username})
 
-    }
-    catch (e){
-    }
-}
 
-module.exports = {create,find,findAll,update,deleteO,login,checkPassword,findU}
+module.exports = {create,find,findAll,update,deleteO,checkPassword,findU,findR}
