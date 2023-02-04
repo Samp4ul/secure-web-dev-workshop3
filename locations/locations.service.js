@@ -1,15 +1,21 @@
 // This file holds the Business-Logic layer, interacting with Data Layer
-
 const Location = require('./locations.model')
 
 function findAll () {
 	return Location.find()
 }
 
-function find(id) {
-	return Location.findOne(
-		{_id:id}
-	)
+async function findOne(id) {
+	let location;
+	try {
+		location = await Location.findById(id);
+	} catch (e) {
+
+	}
+	if (!location) {
+
+	}
+	return location;
 }
 
 function create(updateInfo){
@@ -17,14 +23,30 @@ function create(updateInfo){
 
 }
 
-function update(id,updateInfo){
-	return Location.updateOne({_id:id},updateInfo)
+async function updateOne(id, locationData) {
+	const location = await findOne(id);
+	for (const locationElementKey in locationData) {
+		if (
+			locationElementKey[0] !== "_" &&
+			locationData.hasOwnProperty(locationElementKey)
+		) {
+			location[locationElementKey] = locationData[locationElementKey];
+		}
+	}
+	await location.save();
+	return await findOne(id);
+}
+
+async function deleteO(id) {
+	try{
+		const location = await findOne(id);
+		return location.remove();
+	}
+	catch (e){
+
+	}
 
 }
 
-function deleteO(id){
-	return Location.deleteOne(find({_id:id}))
-}
-
-module.exports = {findAll,find,update,deleteO,create}
+module.exports = {findAll,findOne,updateOne,deleteO,create}
 

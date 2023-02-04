@@ -12,11 +12,14 @@ async function create(updateInfo) {
 
 async function checkPassword(username,password){
     const user = await Login.findOne({username})
-    const match = await bcrypt.compare(password,user.password)
-    if(!match){
-        return false
+    if(user!=null){
+        const match = await bcrypt.compare(password,user.password)
+        if(!match){
+            return false
+        }
+        return user
     }
-    return user
+
 }
 
 function findAll () {
@@ -28,6 +31,8 @@ function find(id) {
         {_id:id}
     )
 }
+
+
 
 async function findR(id) {
     var ID = ObjectID(id)

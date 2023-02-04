@@ -4,13 +4,12 @@ const usersController = require('./users/users.controller')
 const app = express()
 const port = 3000
 const localStrategy = require("./auth/local.strategy")
-
-
-
+const cors = require('cors');
 
 const mongoose = require('mongoose')
 require('dotenv').config()
 
+app.use(cors())
 app.use(locationController)
 app.use(usersController)
 
